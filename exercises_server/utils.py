@@ -43,3 +43,19 @@ def force_utc(dt):
         return dt.replace(tzinfo=tzutc())
     else:
         return dt
+
+
+def parse_json_body(json_body, required_keys=[], optional_keys=[], defaults={}):
+    from pyramid.httpexceptions import HTTPBadRequest
+
+    missing_keys = set(required_keys) - set(json_body.keys())
+    if len(missing_keys) > 0:
+        raise HTTPBadRequest("JSON body has missing required keys: " + repr(list(missing_keys)))
+
+    extra_keys = set(json_body.keys()) - set(required_keys) - set(optional_keys) - set(defaults.keys())
+    if len(extra_keys) > 0:
+        raise HTTPBadRequest("JSON body has extra keys: " + repr(list(extra_keys)))
+
+    params = dict(defaults)
+    params.update(json_body)
+    return params

@@ -6,8 +6,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 
 requires = [
-    'pyramid == 1.4',
-    'python-dateutil == 2.1',
+    'pyramid >= 1.4',
+    'python-dateutil >= 2.1',
     'SQLAlchemy',
     'transaction',
     'pyramid_tm',
@@ -21,9 +21,9 @@ requires = [
     'webtest',
     ]
 
-setup(name='rest',
+setup(name='exercises_server',
       version='0.0',
-      description='Generic REST service',
+      description='Siyavula Exercises Server',
       long_description=README,
       classifiers=[
         "Programming Language :: Python",
@@ -38,12 +38,12 @@ setup(name='rest',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='rest',
+      test_suite='exercises_server',
       install_requires=requires,
       entry_points="""\
       [paste.app_factory]
-      main = rest:main
+      main = exercises_server:main
       [console_scripts]
-      initialize_db = rest.scripts.initializedb:main
+      initialize_db = exercises_server.scripts.initializedb:main
       """,
       )

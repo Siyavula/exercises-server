@@ -2,12 +2,12 @@ import transaction
 
 from pyramid.paster import get_appsettings
 
-import rest.requests
-from rest.models.support import DBSession
-from rest.models import Base, Entry
+import exercises_server.requests
+from exercises_server.models.support import DBSession
+from exercises_server.models import Base, Exercise, CurrentVersion
 
 def init_testing_app():
-    from rest import main
+    from exercises_server import main
     from webtest import TestApp
 
     app = main({}, **get_appsettings('test.ini#main'))

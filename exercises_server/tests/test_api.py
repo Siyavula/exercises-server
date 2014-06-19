@@ -4,11 +4,11 @@ from pyramid import testing
 
 from json import loads
 
-from rest.tests import init_testing_app, init_testing_db
-from rest.models.support import DBSession
+from exercises_server.tests import init_testing_app, init_testing_db
+from exercises_server.models.support import DBSession
 
 class APITests(unittest.TestCase):
-    USER = 'rest'
+    USER = 'exercises_server'
     PAYLOAD = {'a': 'b', 'c': ['d', 'e']}
 
     def setUp(self):

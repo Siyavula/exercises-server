@@ -22,19 +22,18 @@ def main(global_config, **settings):
     config.scan()
     return config.make_wsgi_app()
 
+
 def setup_routes(config):
-    config.add_route('create',  '/create',      request_method='POST')
-    config.add_route('read',    '/read/{id}',   request_method='GET')
-    config.add_route('update',  '/update/{id}', request_method='PUT')
-    config.add_route('delete',  '/delete/{id}', request_method='DELETE')
-    config.add_route('list',    '/list',        request_method='GET')
-    config.add_route('lock',    '/lock/{id}',   request_method='PUT')
-    config.add_route('unlock',  '/unlock/{id}', request_method='PUT')
+    config.add_route('read',    '/read',    request_method='GET')
+    config.add_route('update',  '/update',  request_method='PUT')
+    config.add_route('publish', '/publish', request_method='PUT') # {'id': str [required], 'version': str [None], 'branch': ('testing', 'published') ['published']}
+    config.add_route('retract', '/retract', request_method='PUT') # {'id': str [required], 'branch': ('testing', 'published') ['published']}
+    config.add_route('list',    '/list',    request_method='GET') # {'branch': ('testing', 'published') ['published']}
 
 
 def setup_database(settings):
     from sqlalchemy import engine_from_config
-    from rest.models import DBSession, Base
+    from exercises_server.models import DBSession, Base
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
@@ -52,8 +51,8 @@ def setup_logging():
 
     # the nose test handlers mess with this
     if not handler.__module__.startswith('nose'):
-        import rest.requests
-        handler.addFilter(rest.requests.RequestIdFilter())
+        import exercises_server.requests
+        handler.addFilter(exercises_server.requests.RequestIdFilter())
         # force the formatter to use a request id
         if handler.formatter:
             setattr(handler.formatter, '_fmt', '%(asctime)s %(levelname)-5.5s [%(requestid)s] [%(process)d] [%(name)s][%(threadName)s] %(message)s')

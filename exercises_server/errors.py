@@ -4,13 +4,13 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.threadlocal import get_current_request
 
 
-class RestError(object):
+class ExercisesError(object):
     """
-    Mixin class to support sending REST errors over HTTP.
+    Mixin class to support sending errors over HTTP.
     """
 
     def __init__(self, message, **kwargs):
-        super(RestError, self).__init__(self, **kwargs)
+        super(ExercisesError, self).__init__(self, **kwargs)
 
         self._error_code = None
         self.body = json.dumps(self.make_error(message))
@@ -36,9 +36,5 @@ class RestError(object):
             }}
 
 
-class EntryInvalid(RestError, HTTPBadRequest):
-    pass
-
-
-class EntryLocked(RestError, HTTPBadRequest):
+class ExerciseInvalid(ExercisesError, HTTPBadRequest):
     pass

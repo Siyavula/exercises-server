@@ -1,8 +1,8 @@
-Generic REST service README
-===========================
+Siyavula Exercises Server
+=========================
 
-This is a Pylons-based framework for a generic REST web server that
-supports CRUD through HTTP POST, GET, PUT, DELETE.
+This is a web server for managing Siyavula's repository of exercises
+through a CRUD like interface.
 
 Development
 -----------

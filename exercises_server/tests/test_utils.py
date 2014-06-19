@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from dateutil.tz import tzutc
-from rest.utils import force_utc, parse_iso8601
+from exercises_server.utils import force_utc, parse_iso8601
 
 class TestUtils(unittest.TestCase):
     def test_force_utc(self):

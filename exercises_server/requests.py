@@ -8,7 +8,7 @@ import uuid
 
 from json import dumps
 
-from rest.utils import now_utc 
+from exercises_server.utils import now_utc 
 
 @subscriber(NewRequest)
 def add_request_id(event):
