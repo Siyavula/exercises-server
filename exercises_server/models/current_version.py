@@ -31,4 +31,4 @@ class CurrentVersion(Base):
     @classmethod
     def get_by_id(cls, branch, id):
         query = DBSession.query(CurrentVersion)
-        return query.get(branch, id)
+        return query.get((branch, id))

@@ -38,3 +38,7 @@ class ExercisesError(object):
 
 class ExerciseInvalid(ExercisesError, HTTPBadRequest):
     pass
+
+
+class BadRequest(ExercisesError, HTTPBadRequest):
+    pass

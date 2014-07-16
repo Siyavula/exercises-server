@@ -45,13 +45,13 @@ class Exercise(Base):
 
 
     def __str__(self):
-        return "<Exercise id=%s, version=%s>" % (self.id, self.version)
+        return "<Exercise id=%s, version=%s, created=%s, last_updated=%s>" % (self.id, self.version, self.created, self.last_updated)
 
 
     @classmethod
     def get_by_id(cls, id, version):
         query = DBSession.query(Exercise)
-        return query.get(id, version)
+        return query.get((id, version))
 
 
     @classmethod

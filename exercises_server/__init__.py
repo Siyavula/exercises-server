@@ -26,9 +26,9 @@ def main(global_config, **settings):
 def setup_routes(config):
     config.add_route('read',    '/read',    request_method='GET')
     config.add_route('update',  '/update',  request_method='PUT')
-    config.add_route('publish', '/publish', request_method='PUT') # {'id': str [required], 'version': str [None], 'branch': ('testing', 'published') ['published']}
-    config.add_route('retract', '/retract', request_method='PUT') # {'id': str [required], 'branch': ('testing', 'published') ['published']}
-    config.add_route('list',    '/list',    request_method='GET') # {'branch': ('testing', 'published') ['published']}
+    config.add_route('publish', '/publish', request_method='PUT')
+    config.add_route('retract', '/retract', request_method='PUT')
+    config.add_route('list',    '/list',    request_method='GET')
 
 
 def setup_database(settings):
