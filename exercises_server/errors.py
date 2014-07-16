@@ -10,7 +10,7 @@ class ExercisesError(object):
     """
 
     def __init__(self, message, **kwargs):
-        super(ExercisesError, self).__init__(self, **kwargs)
+        super(ExercisesError, self).__init__(**kwargs)
 
         self._error_code = None
         self.body = json.dumps(self.make_error(message))
@@ -37,7 +37,13 @@ class ExercisesError(object):
 
 
 class ExerciseInvalid(ExercisesError, HTTPBadRequest):
-    pass
+    def __init__(self, *args, **kwargs):
+        validation_result = kwargs.pop('validation_result', None)
+        super(ExerciseInvalid, self).__init__(*args, **kwargs)
+        if validation_result is not None:
+            body = json.loads(self.body)
+            body['error']['validation_result'] = validation_result
+            self.body = json.dumps(body)
 
 
 class BadRequest(ExercisesError, HTTPBadRequest):

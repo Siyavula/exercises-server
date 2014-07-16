@@ -69,6 +69,14 @@ def read_view(request):
         question = question_from_zip(exercise.data, iRandomSeed=randomSeed)
         
         if params['make_derivative']:
+            '''
+            <derived_from>
+              <id> params['id'] </id>
+              <version> version </version>
+              <random_seed> randomSeed </random_seed>
+              <relationship> ??? </relationship>
+            </derived_from>
+            '''
             pass # TODO
 
         # Zip instance up again
@@ -84,6 +92,13 @@ def read_view(request):
     else:
         exerciseZip = exercise.data
         if params['make_derivative']:
+            '''
+            <derived_from>
+              <id> params['id'] </id>
+              <version> version </version>
+              <relationship> ??? </relationship>
+            </derived_from>
+            '''
             pass # TODO
 
     from base64 import b64encode
@@ -112,8 +127,14 @@ def update_view(request):
     from base64 import b64decode
     data = b64decode(request.json_body['data_base64'])
 
-    # TODO: validate exercise/template
+    # Validate exercise
+    from monassis.qnxmlservice import validate_question_zip
+    result = validate_question_zip(data)
+    if not result['validated']:
+        result['exception'] = repr(result['exception'])
+        raise ExerciseInvalid("Exercise failed to validate", validation_result=result) # TODO
 
+    # Put exercises to database
     from utils import now_utc
     exercise = DBSession.merge(Exercise(id=params['id'], version=params['version'], data=data, last_updated=now_utc()))
     log.info("Put exercise: %s" % exercise)

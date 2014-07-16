@@ -8,6 +8,15 @@ class ExercisesServerException(Exception):
         self.error_message = error_message
 
 
+class ValidationError(ExercisesServerException):
+    def __init__(self, status_code, error_message, validation_result):
+        ExercisesServerException.__init__(self, status_code, error_message)
+        self.validation_result = validation_result
+
+    def __str__(self):
+        return ExercisesServerException.__str__(self) + ' ' + self.validation_result['exception'] + ' in ' + self.validation_result['phase'] + ' phase with random seed ' + repr(self.validation_result['random_seed'])
+
+
 class UnhandledResponse(ExercisesServerException):
     pass
 
@@ -56,7 +65,10 @@ class ExercisesServerSession:
                 'version': str(version),
                 'data_base64': b64encode(zipData)}),
             **self.request_params)
-        self.__handle_unexpected_status_codes(response)
+        self.__handle_unexpected_status_codes(response, [200, 400])
+        if response.status_code == 400:
+            body = response.json()
+            raise ValidationError(response.status_code, body['error']['message'], body['error']['validation_result'])
         assert json.loads(response.content)['result'] == 'success'
 
 
@@ -129,9 +141,10 @@ if __name__ == '__main__':
     session = ExercisesServerSession('http://localhost:6544', auth=None, verify=False)
 
     # List
-    print 'Default:  ', session.list()
-    print 'Testing:  ', session.list('testing')
-    print 'Published:', session.list('published')
+    print 'Listing branches'
+    print ' * default:  ', session.list()
+    print ' * testing:  ', session.list('testing')
+    print ' * published:', session.list('published')
     try:
         session.list('other')
         assert False
@@ -139,12 +152,14 @@ if __name__ == '__main__':
         assert error.status_code == 400
 
     # update
+    print 'Validating and putting exercise'
     #path = '/home/carl/work/siyavula/code/monassis-templates-develop/mathematics/grade10/01-algebraic-expressions/01decToFrac'
     path = '/home/carl/work/siyavula/code/monassis-templates-develop/physical_sciences/grade12/06-doppler-effect/2_21_L1_L2_S_same_dir'
     exerciseId, exerciseVersion, exerciseData = make_zip(path)
     session.insert_or_update(exerciseId, exerciseVersion, exerciseData)
 
     # read
+    print 'Reading back exercise'
     for version in ['testing', exerciseVersion]:
         print 'Read', version
         assert session.read(exerciseId, version=version) == exerciseData
@@ -153,8 +168,10 @@ if __name__ == '__main__':
         fp.write(data)
 
     # publish
+    print 'Publishing'
     session.publish(exerciseId)
     assert session.read(exerciseId, version='published') == exerciseData
 
     # retract
+    print 'Retracting'
     session.retract(exerciseId, branch='both')
