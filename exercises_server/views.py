@@ -60,9 +60,17 @@ def read_view(request):
     if params.has_key('random_seed'):
         randomSeed = int(params['random_seed'])
 
-        # TODO: Check that this is a template and not a static exercise
-        if False:
-            raise ExeciseInvalid("Static exercise cannot have a random seed")
+        import StringIO, zipfile
+        from lxml import etree
+
+        # Check that this is a template and not a static exercise
+        templateDom = etree.parse(
+            zipfile.ZipFile(StringIO.StringIO(exercise.data)).open('main.xml'),
+            parser=etree.XMLParser(remove_comments=True),
+        ).getroot()
+        logicElement = templateDom.find('logic')
+        if logicElement is None:
+            raise ExerciseInvalid("Static exercise cannot have a random seed")
 
         # Generate instance from template
         from monassis.qnxmlservice import question_from_zip
@@ -132,7 +140,7 @@ def update_view(request):
     result = validate_question_zip(data)
     if not result['validated']:
         result['exception'] = repr(result['exception'])
-        raise ExerciseInvalid("Exercise failed to validate", validation_result=result) # TODO
+        raise ExerciseInvalid("Exercise failed to validate", validation_result=result)
 
     # Put exercises to database
     from utils import now_utc
