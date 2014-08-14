@@ -1,0 +1,12 @@
+Changelog
+=========
+
+0.2
+---
+
+- Created QA ini file
+
+0.1 (14 August 2014)
+---
+
+- Initial release for setting up QA server
