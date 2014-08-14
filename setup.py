@@ -22,7 +22,7 @@ requires = [
     ]
 
 setup(name='exercises_server',
-      version='0.0',
+      version='0.1',
       description='Siyavula Exercises Server',
       long_description=README,
       classifiers=[
