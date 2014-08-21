@@ -239,7 +239,7 @@ def list_view(request):
         < {
             'branch': ('testing', 'published'), [default: published]  # The branch to list
         }
-        > { 'exercises': [exercise_id, ... ] }
+        > { 'exercises': [ { 'id': str, 'version': str }, ... ] }
     '''
     params = parse_json_body(
         request.json_body,
@@ -248,6 +248,6 @@ def list_view(request):
     if params['branch'] not in ['testing', 'published']:
         raise HTTPBadRequest("Unknown branch %s should be 'testing' or 'published'" % (repr(params['branch'])))
 
-    query = DBSession.query(CurrentVersion.id).filter(CurrentVersion.branch == params['branch'])
-    exercises = [id for (id,) in query]
+    query = DBSession.query(CurrentVersion).filter(CurrentVersion.branch == params['branch'])
+    exercises = [{'id': row.id, 'version': row.version} for row in query]
     return {"exercises": exercises}
