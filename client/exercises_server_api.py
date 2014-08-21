@@ -1,3 +1,9 @@
+'''
+Exercises server client API. Import this module and use the
+ExercisesServerSession class to connect and make calls to an exercises
+server. The methods of this class implement all available REST calls,
+namely list, read, update, publish, retract.
+'''
 import requests
 import urlparse
 import json
