@@ -116,7 +116,7 @@ class ExercisesServerSession:
             specified if the exercise is static (not a template).
             Default: return the template and not an instance of it.
 
-        make_derivative - Whether to inject the derivative-of headers
+        make_derivative - Whether to inject the derived-from headers
             into the exercise XML. Default: False. NOT YET IMPLEMENTED.
 
         Returns a binary string with the exercise zip.
