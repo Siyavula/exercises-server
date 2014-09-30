@@ -35,6 +35,6 @@ if __name__ == "__main__":
 
         for _id, _seed in zip(all_ids, all_seeds):
             template = session.read(_id, 'testing', _seed)
-            with open("{}.zip".format(_id), 'wb') as out:
+            with open("{}-{}.zip".format(_id, _seed), 'wb') as out:
                 print("Writing {}".format(_id))
                 out.write(template)
