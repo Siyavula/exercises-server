@@ -34,7 +34,24 @@ if __name__ == "__main__":
             all_seeds = [None for i in all_ids]
 
         for _id, _seed in zip(all_ids, all_seeds):
-            template = session.read(_id, 'testing', _seed)
-            with open("{}-{}.zip".format(_id, _seed), 'wb') as out:
+
+            # if we're asking for a full id, just ask the server for it
+
+            if len(_id) > 8:
+                template = session.read(_id, 'testing', _seed)
+
+            else:
+
+                # if we're asking for a short id, first get the list of ids
+                # from the server then select the correct one
+                alltemplates = session.list('testing')
+                template = [t for t in alltemplates if t['id'].startswith(_id)]
+                assert(len(template) == 1)
+                template = template[0]
+                longid = template['id']
+                template = session.read(longid, 'testing', _seed)
+
+
+            with open("{}-{}.zip".format(_id[0:8], _seed), 'wb') as out:
                 print("Writing {}".format(_id))
                 out.write(template)
