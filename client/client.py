@@ -53,7 +53,7 @@ def write_template(templatezip, _id, _seed):
 
     elements_to_remove = ['response', 'hint']
     for elem in elements_to_remove:
-        for thiselem in mainxml.findall(elem):
+        for thiselem in mainxml.findall(".//{}".format(elem)):
             thiselem.getparent().remove(thiselem)
 
     with open(os.path.join(outputfolder, 'main.xml'), 'w') as out:
