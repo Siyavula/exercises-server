@@ -50,9 +50,11 @@ def write_template(templatezip, _id, _seed):
     with open(os.path.join(outputfolder, 'main.xml')) as xml:
         mainxml = etree.XML(xml.read())
 
-    # remove the response element
-    for response in mainxml.findall('.//response'):
-        response.getparent().remove(response)
+
+    elements_to_remove = ['response', 'hint']
+    for elem in elements_to_remove:
+        for thiselem in mainxml.findall(elem):
+            thiselem.getparent().remove(thiselem)
 
     with open(os.path.join(outputfolder, 'main.xml'), 'w') as out:
         out.write(etree.tostring(mainxml, encoding='utf-8',
